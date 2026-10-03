@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>After-Lecture Practice — Matching Information to Paragraphs</title>
+<style>
+  :root {
+    --navy: #1A2A4A;
+    --blue: #0275D8;
+    --purple: #8E44AD;
+    --amber: #D97706;
+    --green: #5CB85C;
+    --red: #D9534F;
+    --bg: #F4F6F9;
+    --card: #FFFFFF;
+    --border: #E1E6ED;
+    --text: #24303F;
+    --muted: #64748B;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 0 0 60px 0;
+    line-height: 1.55;
+  }
+  header {
+    background: linear-gradient(135deg, var(--navy), #2b3f6b);
+    color: white;
+    padding: 28px 20px 22px;
+    text-align: center;
+  }
+  header h1 { margin: 0 0 6px; font-size: 1.5rem; }
+  header p { margin: 0; opacity: 0.85; font-size: 0.95rem; }
+
+  .container { max-width: 880px; margin: 0 auto; padding: 0 18px; }
+
+  .timebar {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 18px;
+    font-size: 0.82rem;
+  }
+  .timebar span {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 12px;
+    color: var(--muted);
+  }
+  .timebar span strong { color: var(--navy); }
+
+  .section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-top: 24px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(20,30,60,0.05);
+  }
+  .section-head {
+    padding: 14px 20px;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  .section-head-left { display: flex; align-items: center; gap: 10px; }
+  .section-head .tag {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background: rgba(255,255,255,0.22);
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-weight: 700;
+  }
+  .section-head .time-tag {
+    font-size: 0.72rem;
+    background: rgba(255,255,255,0.14);
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+  }
+  .section-head h2 { margin: 0; font-size: 1.08rem; }
+  .basic .section-head { background: var(--blue); }
+  .intermediate .section-head { background: var(--purple); }
+  .advanced .section-head { background: var(--amber); }
+  .application .section-head { background: var(--navy); }
+
+  .section-body { padding: 18px 20px 22px; }
+  .instructions { font-style: italic; color: var(--muted); margin-bottom: 16px; font-size: 0.92rem; }
+
+  .q-item { margin-bottom: 18px; }
+  .q-item .q-num { font-weight: 700; color: var(--navy); margin-right: 6px; }
+  .q-type {
+    display: inline-block;
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+    color: white;
+    background: var(--muted);
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+  .q-type.mcq { background: var(--blue); }
+  .q-type.tf { background: var(--red); }
+  .q-type.fix { background: #B45309; }
+  .q-type.write { background: var(--green); }
+  .q-type.check { background: var(--amber); }
+
+  .choice-group { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+  .choice-group label {
+    font-weight: 400;
+    cursor: pointer;
+    background: #F7F9FC;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+  }
+  .choice-group label:hover { border-color: var(--blue); }
+  .choice-group input { margin-right: 8px; }
+
+  select {
+    padding: 7px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    background: white;
+  }
+
+  textarea, input[type=text] {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    resize: vertical;
+    background: #FCFCFD;
+  }
+  textarea:focus, input:focus, select:focus { outline: 2px solid var(--blue); outline-offset: 1px; background: white; }
+
+  .task-block {
+    background: #F7F9FC;
+    border-left: 4px solid var(--purple);
+    border-radius: 4px;
+    padding: 10px 14px;
+    margin-bottom: 14px;
+    font-size: 0.92rem;
+  }
+  .task-block.passage { border-left-color: var(--navy); }
+
+
+  .checklist { margin-top: 14px; font-size: 0.9rem; }
+  .checklist label { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 8px; cursor: pointer; }
+  .checklist input { margin-top: 3px; }
+
+  .gap-input { width: 110px; display: inline-block; margin-left: 8px; }
+  .stmt-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+  .stmt-row span.stmt { flex: 1; min-width: 220px; }
+
+  .submit-panel {
+    background: var(--navy);
+    color: white;
+    border-radius: 10px;
+    margin-top: 30px;
+    padding: 24px 22px;
+  }
+  .submit-panel h2 { margin: 0 0 6px; font-size: 1.2rem; }
+  .submit-panel p { margin: 0 0 16px; opacity: 0.85; font-size: 0.92rem; }
+  .btn-row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn {
+    border: none;
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-size: 0.92rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.1s ease, opacity 0.2s ease;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary { background: var(--amber); color: white; }
+  .btn-secondary { background: rgba(255,255,255,0.14); color: white; border: 1px solid rgba(255,255,255,0.3); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .status-msg {
+    margin-top: 14px;
+    font-size: 0.88rem;
+    padding: 10px 14px;
+    border-radius: 7px;
+    display: none;
+  }
+  .status-msg.show { display: block; }
+  .status-ok { background: rgba(92,184,92,0.18); border: 1px solid rgba(92,184,92,0.4); }
+  .status-warn { background: rgba(217,83,79,0.18); border: 1px solid rgba(217,83,79,0.4); }
+
+  .preview-box {
+    margin-top: 18px;
+    background: rgba(0,0,0,0.25);
+    border-radius: 8px;
+    padding: 14px;
+    max-height: 260px;
+    overflow-y: auto;
+    display: none;
+  }
+  .preview-box.show { display: block; }
+  .preview-box pre {
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin: 0;
+    font-family: 'Consolas', monospace;
+    font-size: 0.8rem;
+    color: #E8EDF5;
+  }
+
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.8rem;
+    margin-top: 34px;
+    padding: 0 20px;
+  }
+
+  .check-panel {
+    background: white;
+    border: 2px solid var(--green);
+    border-radius: 10px;
+    margin-top: 30px;
+    padding: 20px 22px;
+    text-align: center;
+  }
+  .check-panel h2 { margin: 0 0 6px; font-size: 1.15rem; color: var(--navy); }
+  .check-panel p { margin: 0 0 14px; color: var(--muted); font-size: 0.9rem; }
+  .btn-check {
+    border: none;
+    background: var(--green);
+    color: white;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .btn-check:active { transform: scale(0.97); }
+
+  .feedback {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 6px;
+  }
+  .feedback.correct { background: rgba(92,184,92,0.16); color: #2E7D32; border: 1px solid rgba(92,184,92,0.45); }
+  .feedback.incorrect { background: rgba(217,83,79,0.14); color: #B3261E; border: 1px solid rgba(217,83,79,0.4); }
+
+  .suggested {
+    margin-top: 6px;
+    background: #EFF6FF;
+    border: 1px solid rgba(2,117,216,0.3);
+    border-left: 4px solid var(--blue);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+  .suggested strong { color: var(--blue); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Matching Information to Paragraphs</h1>
+  <p>Week 19, Day 36 — After-Lecture Practice</p>
+</header>
+
+<div class="container">
+
+  <div class="timebar">
+    <span>🔵 Basic <strong>~12 min</strong></span>
+    <span>🟣 Intermediate <strong>~24 min</strong></span>
+    <span>🟠 Advanced <strong>~16 min</strong></span>
+    <span>🔷 Application <strong>~12 min</strong></span>
+  </div>
+
+  <!-- ============ BASIC ============ -->
+  <div class="section basic">
+    <div class="section-head"><div class="section-head-left"><span class="tag">Basic</span><h2>Recognizing the Rules</h2></div><span class="time-tag">~12 min</span></div>
+    <div class="section-body">
+      <p class="instructions">Five quick checks on today's core rules before you work with a full passage.</p>
+
+      <div class="q-item">
+        <span class="q-num">1.</span>Matching Information questions ask you to find...<span class="q-type mcq">Multiple Choice</span>
+        <div class="choice-group">
+          <label><input type="radio" name="b1" value="A"> A. A paragraph's overall main idea</label>
+          <label><input type="radio" name="b1" value="B"> B. The specific paragraph where one exact detail is mentioned</label>
+          <label><input type="radio" name="b1" value="C"> C. The author's personal opinion</label>
+        </div>
+      </div>
+
+      <div class="q-item">
+        <span class="q-num">2.</span>"Every lettered paragraph will have exactly one matching statement."<span class="q-type tf">True / False</span>
+        <div class="choice-group">
+          <label><input type="radio" name="b2" value="True"> True</label>
+          <label><input type="radio" name="b2" value="False"> False</label>
+        </div>
+      </div>
+
+      <div class="q-item">
+        <span class="q-num">3.</span>Which statement is easiest to scan for first?<span class="q-type mcq">Multiple Choice</span>
+        <div class="choice-group">
+          <label><input type="radio" name="b3" value="A"> A. "Many people consider this to be an important development."</label>
+          <label><input type="radio" name="b3" value="B"> B. "Dr. Patricia Nguyen first proposed this theory in 1987."</label>
+        </div>
+      </div>
+
+      <div class="q-item">
+        <span class="q-num">4.</span>When should you attempt Matching Information questions on a passage?<span class="q-type mcq">Multiple Choice</span>
+        <div class="choice-group">
+          <label><input type="radio" name="b4" value="A"> A. First, before reading anything else closely</label>
+          <label><input type="radio" name="b4" value="B"> B. Last, after answering every other question type on that passage</label>
+          <label><input type="radio" name="b4" value="C"> C. It doesn't matter -- order never affects difficulty</label>
+        </div>
+      </div>
+
+      <div class="q-item">
+        <span class="q-num">5.</span>Statement: <em>"The bridge was completed in 1932 after nearly four years of construction."</em> What's the single best keyword to scan for first?<span class="q-type write">Spot the Keyword</span>
+        <input type="text" id="b5" placeholder="Your answer...">
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ INTERMEDIATE ============ -->
+  <div class="section intermediate">
+    <div class="section-head"><div class="section-head-left"><span class="tag">Intermediate</span><h2>Match, Translate, and Judge</h2></div><span class="time-tag">~24 min</span></div>
+    <div class="section-body">
+      <p class="instructions">A new passage, a keyword drill, and real-vs-trap judgment calls.</p>
+
+      <div class="q-item">
+        <span class="q-num">1.</span>Read the passage, then match each statement to a paragraph.<span class="q-type write">Matching</span>
+        <div class="task-block passage">
+          <strong>A)</strong> Lacquerware production in Vietnam dates back over two thousand years, with early artisans using resin from the s&#417;n tree to coat wooden objects for protection against humidity and insects. For centuries, the craft remained largely utilitarian, producing simple bowls, trays, and ceremonial items.<br><br>
+          <strong>B)</strong> In the early twentieth century, the &Eacute;cole des Beaux-Arts de l'Indochine in Hanoi transformed lacquer from a craft into a fine art form. Students combined traditional Vietnamese techniques with French artistic training, experimenting with eggshell inlay, gold leaf, and multiple layers of polishing to create paintings rather than purely functional objects.<br><br>
+          <strong>C)</strong> Today, Vietnamese lacquer paintings are exhibited in galleries worldwide, and the technique continues to evolve as contemporary artists blend traditional methods with modern subject matter. However, mastering the craft still requires years of apprenticeship, since each piece can take months to complete due to the many layers of lacquer and drying time required.
+        </div>
+        <div class="stmt-row"><span class="stmt">1. A specific school is credited with turning lacquer into an art form.</span><select id="i1-1"><option value="">-- choose --</option><option value="A">A</option><option value="B">B</option><option value="C">C</option></select></div>
+        <div class="stmt-row"><span class="stmt">2. The material originally used to protect wooden items came from a tree.</span><select id="i1-2"><option value="">-- choose --</option><option value="A">A</option><option value="B">B</option><option value="C">C</option></select></div>
+        <div class="stmt-row"><span class="stmt">3. Finished artworks can take a long time to produce because of a slow drying process.</span><select id="i1-3"><option value="">-- choose --</option><option value="A">A</option><option value="B">B</option><option value="C">C</option></select></div>
+        <div class="stmt-row"><span class="stmt">4. Vietnamese lacquer art is now displayed internationally.</span><select id="i1-4"><option value="">-- choose --</option><option value="A">A</option><option value="B">B</option><option value="C">C</option></select></div>
+      </div>
+
+      <div class="q-item">
+        <span class="q-num">2.</span>For each statement, identify the single best keyword or phrase to scan for first.<span class="q-type write">Keyword Doctor</span>
+        <div class="stmt-row"><span class="stmt">"The temple was rebuilt following a fire in 1952."</span><input type="text" id="i2-1" placeholder="Best keyword..."></div>
+        <div class="stmt-row"><span class="stmt">"An environmental group criticized the new factory's emissions."</span><input type="text" id="i2-2" placeholder="Best keyword..."></div>
+        <div class="stmt-row"><span class="stmt">"Dr. Nguyen Van A led the research team."</span><input type="text" id="i2-3" placeholder="Best keyword..."></div>
+      </div>
+
+      <div class="q-item">
+        <span class="q-num">3.</span>For each pair, judge whether the candidate sentence is a genuine match or a one-word trap.<span class="q-type tf">Real Match or Trap?</span>
+        <div class="task-block">Statement: "The company's profits doubled last year." <br>Candidate sentence from passage: "Last year, the company launched three new products."</div>
+        <div class="choice-group">
+          <label><input type="radio" name="i4a" value="Real Match"> Real Match</label>
+          <label><input type="radio" name="i4a" value="Trap"> Trap (shares a word, but doesn't confirm the statement)</label>
+        </div>
+        <div class="task-block" style="margin-top:12px;">Statement: "Researchers found a surprising link between diet and sleep quality." <br>Candidate sentence from passage: "The study revealed an unexpected connection between what people eat and how well they sleep."</div>
+        <div class="choice-group">
+          <label><input type="radio" name="i4b" value="Real Match"> Real Match</label>
+          <label><input type="radio" name="i4b" value="Trap"> Trap (shares a word, but doesn't confirm the statement)</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ ADVANCED ============ -->
+  <div class="section advanced">
+    <div class="section-head"><div class="section-head-left"><span class="tag">Advanced</span><h2>Independent Matching &amp; Diagnosis</h2></div><span class="time-tag">~16 min</span></div>
+    <div class="section-body">
+      <p class="instructions">No hints this time -- a full passage with both traps built in, plus a reverse-engineering challenge.</p>
+
+      <div class="q-item">
+        <span class="q-num">1.</span>Read the passage, then match each statement to a paragraph. <em>Note: one paragraph matches nothing, and one paragraph matches twice.</em><span class="q-type write">Matching</span>
+        <div class="task-block passage">
+          <strong>A)</strong> Urban beekeeping has grown rapidly in cities such as London, New York, and Hanoi over the past fifteen years, as residents install hives on rooftops and in community gardens. Enthusiasts argue that keeping bees in urban areas supports pollination for city parks and gardens.<br><br>
+          <strong>B)</strong> However, not everyone welcomes the trend. Some scientists warn that a high concentration of managed honeybee hives in a small urban area can actually compete with wild native bee species for limited flowers, potentially harming biodiversity rather than helping it.<br><br>
+          <strong>C)</strong> City governments have responded differently to this debate. Several municipalities now require hobbyist beekeepers to register their hives, while others have introduced subsidized training programs to encourage responsible practices.<br><br>
+          <strong>D)</strong> Despite the controversy, demand for urban beekeeping courses continues to rise, and many participants report that the hobby has deepened their interest in gardening and environmental issues more broadly.
+        </div>
+        <div class="stmt-row"><span class="stmt">1. Keeping bees in cities may actually damage other bee populations.</span><select id="a1-1"><option value="">-- choose --</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></div>
+        <div class="stmt-row"><span class="stmt">2. People who take up this hobby often become more interested in environmental topics generally.</span><select id="a1-2"><option value="">-- choose --</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></div>
+        <div class="stmt-row"><span class="stmt">3. Local authorities now sometimes require beekeepers to officially record their hives.</span><select id="a1-3"><option value="">-- choose --</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></div>
+        <div class="stmt-row"><span class="stmt">4. A financial incentive exists in some areas to promote safer beekeeping practices.</span><select id="a1-4"><option value="">-- choose --</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></div>
+        <div class="stmt-row"><span class="stmt">Which paragraph letter did you not use at all?</span><select id="a1-zero"><option value="">-- choose --</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></div>
+      </div>
+
+      <div class="q-item">
+        <span class="q-num">2.</span>A student answered this question incorrectly. Explain the trap they fell into.<span class="q-type write">Diagnose the Error</span>
+        <div class="task-block">Statement: "The hobby has become extremely popular in three specific cities." <br>Student's answer: Paragraph B, because "it also mentions bees in cities."</div>
+        <input type="text" id="a2" placeholder="What is the correct paragraph, and why did the student's reasoning fail?">
+      </div>
+
+      <div class="q-item">
+        <span class="q-num">3.</span>Reverse-engineer a statement: write ONE new, original statement that would correctly match Paragraph D above.<span class="q-type write">Build a Statement</span>
+        <textarea id="a3" rows="2" placeholder="Write your statement here..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ APPLICATION ============ -->
+  <div class="section application">
+    <div class="section-head"><div class="section-head-left"><span class="tag">Application</span><h2>Full Task: Complete Matching Set</h2></div><span class="time-tag">~12 min</span></div>
+    <div class="section-body">
+
+      <div class="task-block passage">
+        <strong>A)</strong> Night markets have long been a fixture of urban life across Southeast Asia, with roots stretching back to street vendors who began setting up stalls after sunset to avoid the daytime heat. Today, cities such as Bangkok, Taipei, and Ho Chi Minh City are famous for night markets that draw both locals and tourists.<br><br>
+        <strong>B)</strong> Beyond food, modern night markets increasingly feature live music, handicraft stalls, and pop-up fashion boutiques, transforming what was once a purely practical shopping option into a form of evening entertainment.<br><br>
+        <strong>C)</strong> Local governments have taken notice of the economic value these markets generate, with some cities now actively promoting night markets as part of broader tourism campaigns, while providing vendors with improved sanitation facilities and designated parking areas.<br><br>
+        <strong>D)</strong> Critics, however, point out that rising rents in popular tourist areas have pushed many longtime vendors to relocate to less convenient locations, raising concerns about the loss of authentic local culture in favor of markets designed primarily for visitors.
+      </div>
+
+      <div class="q-item">
+        <span class="q-num">1.</span>Match each statement to a paragraph (A-D). Some paragraphs are used more than once; at least one is not used at all.<span class="q-type write">Matching</span>
+        <div class="stmt-row"><span class="stmt">1. Night markets originally developed partly as a way to escape high daytime temperatures.</span><select id="app-1"><option value="">-- choose --</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></div>
+        <div class="stmt-row"><span class="stmt">2. Several well-known cities are specifically named as popular night market destinations.</span><select id="app-2"><option value="">-- choose --</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></div>
+        <div class="stmt-row"><span class="stmt">3. Authorities have begun incorporating night markets into official tourism strategies.</span><select id="app-3"><option value="">-- choose --</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></div>
+        <div class="stmt-row"><span class="stmt">4. Vendors have improved access to basic infrastructure thanks to government support.</span><select id="app-4"><option value="">-- choose --</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></div>
+        <div class="stmt-row"><span class="stmt">5. Increasing costs have forced some long-established vendors out of prime locations.</span><select id="app-5"><option value="">-- choose --</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></div>
+        <div class="stmt-row"><span class="stmt">6. Some observers worry that catering mainly to tourists threatens genuine local traditions.</span><select id="app-6"><option value="">-- choose --</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></div>
+      </div>
+
+      <div class="checklist">
+        <label><input type="checkbox"> I scanned for names, numbers, and unusual words first -- not whole sentences</label>
+        <label><input type="checkbox"> I did not assume every paragraph has exactly one match</label>
+        <label><input type="checkbox"> I reread the full sentence in the passage before confirming each answer, not just a shared word</label>
+        <label><input type="checkbox"> I identified which paragraph(s) have zero or multiple matches before finishing</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SELF-CHECK ============ -->
+  <div class="check-panel">
+    <h2>✅ Check Your Own Answers</h2>
+    <p>For matching and multiple-choice questions, this marks each one correct or incorrect and shows the right answer. For open questions (like Keyword Doctor or the error diagnosis), it shows a suggested answer for you to compare against.</p>
+    <button class="btn-check" onclick="checkAnswers()">✅ Check My Answers</button>
+    <div class="status-msg" id="checkStatus"></div>
+  </div>
+
+  <!-- ============ SUBMISSION ============ -->
+  <div class="submit-panel">
+    <h2>Send Your Answers to Your Teacher</h2>
+    <p>Click "Prepare Submission" to review everything below, then choose how to send it — by email, by copying the text, or by downloading it as a file to attach.</p>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="prepareSubmission()">📝 Prepare Submission</button>
+      <button class="btn btn-secondary" id="emailBtn" onclick="sendByEmail()" disabled>✉️ Open in Email App</button>
+      <button class="btn btn-secondary" id="copyBtn" onclick="copyToClipboard()" disabled>📋 Copy to Clipboard</button>
+      <button class="btn btn-secondary" id="downloadBtn" onclick="downloadAsFile()" disabled>⬇️ Download as .txt</button>
+    </div>
+    <div class="status-msg" id="statusMsg"></div>
+    <div class="preview-box" id="previewBox"><pre id="previewText"></pre></div>
+  </div>
+
+  <footer>
+    Teacher's email: kien.nguyen2411@outlook.com — if the email button doesn't open your mail app, use Copy or Download instead and send it manually.
+  </footer>
+</div>
+
+<script>
+/* ---------- Self-check answer key ---------- */
+const correctSelects = {
+  'i1-1': 'B', 'i1-2': 'A', 'i1-3': 'C', 'i1-4': 'C',
+  'a1-1': 'B', 'a1-2': 'D', 'a1-3': 'C', 'a1-4': 'C', 'a1-zero': 'A',
+  'app-1': 'A', 'app-2': 'A', 'app-3': 'C', 'app-4': 'C', 'app-5': 'D', 'app-6': 'D'
+};
+const correctRadios = {
+  'b1': 'B', 'b2': 'False', 'b3': 'B', 'b4': 'B',
+  'i4a': 'Trap', 'i4b': 'Real Match'
+};
+const suggestedAnswers = {
+  'b5': '"1932" -- the specific year is the easiest thing to scan for.',
+  'i2-1': '"1952" (or "fire in 1952") -- the specific year.',
+  'i2-2': '"environmental group" or "emissions" -- the unusual/technical phrase.',
+  'i2-3': '"Dr. Nguyen Van A" -- the proper name.',
+  'a2': 'Correct paragraph: A. Paragraph A names three specific cities (London, New York, Hanoi). The student matched on the shared word "cities" in paragraph B, but B never gives three named cities -- a one-word/theme trap, not a real match.',
+  'a3': 'Sample answer: "Interest in taking classes about this hobby keeps growing." (matches Paragraph D: "demand for urban beekeeping courses continues to rise")'
+};
+
+function checkAnswers() {
+  // Select-based matching questions
+  for (const id in correctSelects) {
+    const el = document.getElementById(id);
+    if (!el) continue;
+    const correct = correctSelects[id];
+    const isCorrect = el.value === correct;
+    const fb = document.createElement('div');
+    fb.className = 'feedback ' + (isCorrect ? 'correct' : 'incorrect');
+    fb.dataset.for = id;
+    fb.textContent = isCorrect ? '✓ Correct' : ('✗ Your answer: ' + (el.value || '(blank)') + '  |  Correct answer: ' + correct);
+    const row = el.closest('.stmt-row');
+    const old = row.nextElementSibling;
+    if (old && old.dataset && old.dataset.for === id) { old.replaceWith(fb); } else { row.insertAdjacentElement('afterend', fb); }
+  }
+
+  // Radio-group questions
+  for (const name in correctRadios) {
+    const radios = document.querySelectorAll('input[name="' + name + '"]');
+    if (!radios.length) continue;
+    const checked = document.querySelector('input[name="' + name + '"]:checked');
+    const correct = correctRadios[name];
+    const isCorrect = checked && checked.value === correct;
+    const group = radios[0].closest('.choice-group');
+    const fb = document.createElement('div');
+    fb.className = 'feedback ' + (isCorrect ? 'correct' : 'incorrect');
+    fb.dataset.for = name;
+    fb.textContent = isCorrect ? '✓ Correct' : ('✗ Your answer: ' + (checked ? checked.value : '(blank)') + '  |  Correct answer: ' + correct);
+    const old = document.querySelector('.feedback[data-for="' + name + '"]');
+    if (old) { old.replaceWith(fb); } else { group.insertAdjacentElement('afterend', fb); }
+  }
+
+  // Open-ended questions -- suggested answers only
+  for (const id in suggestedAnswers) {
+    const el = document.getElementById(id);
+    if (!el) continue;
+    const box = document.createElement('div');
+    box.className = 'suggested';
+    box.dataset.for = id;
+    box.innerHTML = '<strong>Suggested answer:</strong> ' + suggestedAnswers[id];
+    const row = el.closest('.stmt-row') || el;
+    const old = row.nextElementSibling;
+    if (old && old.dataset && old.dataset.for === id) { old.replaceWith(box); } else { row.insertAdjacentElement('afterend', box); }
+  }
+
+  const statusEl = document.getElementById('checkStatus');
+  statusEl.textContent = '✓ Checked! Green = correct, red = review needed, blue = suggested answer to compare against your own.';
+  statusEl.className = 'status-msg show status-ok';
+}
+
+function radioVal(name) {
+  const el = document.querySelector('input[name="' + name + '"]:checked');
+  return el ? el.value : '(not answered)';
+}
+function val(id) {
+  const el = document.getElementById(id);
+  const v = el.value.trim();
+  return v.length ? v : '(not answered)';
+}
+function checkVal(idx) {
+  const boxes = document.querySelectorAll('.checklist input[type=checkbox]');
+  return boxes[idx] && boxes[idx].checked ? '✔ checked' : '☐ not checked';
+}
+
+function buildSubmissionText() {
+  let out = '';
+  out += 'MATCHING INFORMATION TO PARAGRAPHS (Week 19, Day 36 — After-Lecture Practice)\n';
+  out += '========================================================\n\n';
+
+  out += '--- BASIC: Recognizing the Rules ---\n';
+  out += '1. Matching Information asks for: ' + radioVal('b1') + '\n';
+  out += '2. (True/False) Exactly one match per paragraph: ' + radioVal('b2') + '\n';
+  out += '3. Easiest statement to scan: ' + radioVal('b3') + '\n';
+  out += '4. When to attempt these questions: ' + radioVal('b4') + '\n';
+  out += '5. Best keyword (bridge statement): ' + val('b5') + '\n\n';
+
+  out += '--- INTERMEDIATE: Match, Translate, and Judge ---\n';
+  out += '1. Lacquerware passage matching:\n';
+  out += '   1. ' + val('i1-1') + '   2. ' + val('i1-2') + '   3. ' + val('i1-3') + '   4. ' + val('i1-4') + '\n';
+  out += '2. Keyword Doctor:\n';
+  out += '   1. ' + val('i2-1') + '\n   2. ' + val('i2-2') + '\n   3. ' + val('i2-3') + '\n';
+  out += '3. Real Match or Trap: a) ' + radioVal('i4a') + '   b) ' + radioVal('i4b') + '\n\n';
+
+  out += '--- ADVANCED: Independent Matching & Diagnosis ---\n';
+  out += '1. Urban beekeeping passage matching:\n';
+  out += '   1. ' + val('a1-1') + '   2. ' + val('a1-2') + '   3. ' + val('a1-3') + '   4. ' + val('a1-4') + '\n';
+  out += '   Unused paragraph: ' + val('a1-zero') + '\n';
+  out += '2. Diagnose the error: ' + val('a2') + '\n';
+  out += '3. New statement for Paragraph D: ' + val('a3') + '\n\n';
+
+  out += '--- APPLICATION: Full Task (night markets) ---\n';
+  out += '1. ' + val('app-1') + '   2. ' + val('app-2') + '   3. ' + val('app-3') + '\n';
+  out += '4. ' + val('app-4') + '   5. ' + val('app-5') + '   6. ' + val('app-6') + '\n\n';
+  out += 'Self-check:\n';
+  out += '  ' + checkVal(0) + ' — scanned keywords first\n';
+  out += '  ' + checkVal(1) + ' — did not assume one match per paragraph\n';
+  out += '  ' + checkVal(2) + ' — reread full sentence before confirming\n';
+  out += '  ' + checkVal(3) + ' — identified zero/multiple-match paragraphs\n';
+
+  return out;
+}
+
+let currentSubmission = '';
+
+function prepareSubmission() {
+  const statusEl = document.getElementById('statusMsg');
+  currentSubmission = buildSubmissionText();
+  document.getElementById('previewText').textContent = currentSubmission;
+  document.getElementById('previewBox').classList.add('show');
+  statusEl.textContent = '✓ Submission ready below. Choose how to send it.';
+  statusEl.className = 'status-msg show status-ok';
+  document.getElementById('emailBtn').disabled = false;
+  document.getElementById('copyBtn').disabled = false;
+  document.getElementById('downloadBtn').disabled = false;
+}
+
+function sendByEmail() {
+  const subject = encodeURIComponent('Week 19 Day 36 Matching Information Practice');
+  const body = encodeURIComponent(currentSubmission);
+  window.location.href = 'mailto:kien.nguyen2411@outlook.com?subject=' + subject + '&body=' + body;
+}
+
+function copyToClipboard() {
+  navigator.clipboard.writeText(currentSubmission).then(() => {
+    const statusEl = document.getElementById('statusMsg');
+    statusEl.textContent = '✓ Copied to clipboard! You can now paste it into an email or message.';
+    statusEl.className = 'status-msg show status-ok';
+  }).catch(() => {
+    const statusEl = document.getElementById('statusMsg');
+    statusEl.textContent = '⚠ Could not copy automatically — please select the text in the box above and copy it manually.';
+    statusEl.className = 'status-msg show status-warn';
+  });
+}
+
+function downloadAsFile() {
+  const blob = new Blob([currentSubmission], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'Week19_Day36_MatchingInformation_Practice.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+</script>
+
+</body>
+</html>
